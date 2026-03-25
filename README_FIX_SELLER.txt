@@ -1,0 +1,1 @@
+Corrección: selector de vendedor muestra el vendedor actual aunque no exista como usuario vendedor; cambio de nombre de vendedor actualiza ventas relacionadas.\n

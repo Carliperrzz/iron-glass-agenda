@@ -8,9 +8,126 @@
   <meta http-equiv="Expires" content="0" />
   <title>Iron Glass Agenda v1.6</title>
   <link rel="stylesheet" href="/style.v160.css?v=160" />
+
+  <style>
+    .ig-login-logo {
+      display: flex;
+      justify-content: center;
+      margin: 0 0 14px 0;
+    }
+
+    .ig-login-logo img {
+      width: 190px;
+      max-width: 78%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.18));
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+  </style>
 </head>
 <body>
   <div id="app"></div>
+
   <script src="/app.v160.js?v=160"></script>
+
+  <script>
+    (function () {
+      const LOGO_SRC = "/escudo-iron-glass.jpeg";
+
+      function normalizeText(value) {
+        return String(value || "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLowerCase();
+      }
+
+      function looksLikeDemoBlock(text) {
+        const t = normalizeText(text);
+        if (!t) return false;
+
+        return (
+          t.includes("usuarios demo") ||
+          (
+            t.includes("admin / admin123") &&
+            (
+              t.includes("antonio / 1234") ||
+              t.includes("coord / 1234") ||
+              t.includes("recep") ||
+              t.includes("operario / 1234") ||
+              t.includes("contab / 1234") ||
+              t.includes("consulta / 1234")
+            )
+          )
+        );
+      }
+
+      function hideDemoUsers(root) {
+        const nodes = root.querySelectorAll("div, section, article, aside, p, small, pre");
+        nodes.forEach((el) => {
+          if (el.dataset.igDemoHidden === "1") return;
+
+          const text = el.innerText || el.textContent || "";
+          if (!looksLikeDemoBlock(text)) return;
+
+          el.style.display = "none";
+          el.dataset.igDemoHidden = "1";
+        });
+      }
+
+      function insertLogo(root) {
+        const heading = Array.from(root.querySelectorAll("h1, h2"))
+          .find((el) => /agenda inteligente/i.test(el.textContent || ""));
+
+        if (!heading) return;
+
+        const parent = heading.parentElement;
+        if (!parent) return;
+        if (parent.querySelector(".ig-login-logo")) return;
+
+        const logoWrap = document.createElement("div");
+        logoWrap.className = "ig-login-logo";
+
+        const img = document.createElement("img");
+        img.src = LOGO_SRC;
+        img.alt = "Iron Glass";
+        img.loading = "eager";
+
+        logoWrap.appendChild(img);
+        parent.insertBefore(logoWrap, heading);
+      }
+
+      function applyLoginBranding() {
+        const root = document.getElementById("app") || document.body;
+        hideDemoUsers(root);
+        insertLogo(root);
+      }
+
+      let tries = 0;
+      const maxTries = 120;
+
+      const timer = setInterval(() => {
+        applyLoginBranding();
+        tries += 1;
+        if (document.querySelector(".ig-login-logo") || tries >= maxTries) {
+          clearInterval(timer);
+        }
+      }, 250);
+
+      const observer = new MutationObserver(() => {
+        applyLoginBranding();
+      });
+
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+
+      window.addEventListener("load", applyLoginBranding);
+      document.addEventListener("DOMContentLoaded", applyLoginBranding);
+    })();
+  </script>
 </body>
 </html>

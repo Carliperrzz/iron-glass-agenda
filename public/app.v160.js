@@ -189,14 +189,25 @@ function renderLogin() {
   app.innerHTML = `
     <div class="login">
       <div class="login-card">
-        <div class="eyebrow">Iron Glass</div>
-        <h1>Agenda inteligente</h1>
-        <p class="muted">Simple, clara y lista para el taller.</p>
-        <div class="demo"><strong>Usuarios demo</strong><br>admin / admin123<br>antonio / 1234<br>coord / 1234<br>recepcao / 1234<br>operario / 1234<br>contab / 1234<br>consulta / 1234</div>
-        <form id="loginForm" class="stacked-form">
-          <input name="username" placeholder="Usuario" required />
-          <input name="password" type="password" placeholder="Contraseña" required />
-          <button class="primary">Entrar</button>
+        <div class="login-hero">
+          <div class="login-logo-shell">
+            <img class="login-logo" src="/escudo-iron-glass.jpeg?v=1" alt="Escudo Iron Glass" />
+          </div>
+          <div class="eyebrow login-eyebrow">Iron Glass</div>
+          <h1>Agenda inteligente</h1>
+          <p class="login-subtitle">Control visual del taller, recepción y entregas en una sola pantalla.</p>
+          <div class="login-security-note">Acceso exclusivo para usuarios autorizados.</div>
+        </div>
+        <form id="loginForm" class="stacked-form login-form">
+          <div class="login-field">
+            <label for="username">Usuario</label>
+            <input id="username" name="username" placeholder="Ingresa tu usuario" autocomplete="username" required />
+          </div>
+          <div class="login-field">
+            <label for="password">Contraseña</label>
+            <input id="password" name="password" type="password" placeholder="Ingresa tu contraseña" autocomplete="current-password" required />
+          </div>
+          <button class="primary login-submit">Entrar</button>
         </form>
       </div>
     </div>`;
